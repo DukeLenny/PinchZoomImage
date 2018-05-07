@@ -8,8 +8,8 @@
 
 #import "ViewController.h"
 
-static const CGFloat MaximumZoomScale = 10.0;
-static const CGFloat MinimumZoomScale = 0.1;
+static const CGFloat MaxZoomScale = 10.0;
+static const CGFloat MinZoomScale = 0.1;
 
 @interface ViewController ()
 
@@ -34,9 +34,20 @@ static const CGFloat MinimumZoomScale = 0.1;
 - (void)pinchAction:(UIPinchGestureRecognizer *)pinchGestureRecognizer
 {
     CGFloat currentZoomScale = self.zoomScale + (pinchGestureRecognizer.scale - 1);
-//    if (currentZoomScale ) {
-//        <#statements#>
-//    }
+    
+    if (currentZoomScale > MaxZoomScale) {
+        currentZoomScale = MaxZoomScale;
+    }
+    if (currentZoomScale < MinZoomScale) {
+        currentZoomScale = MinZoomScale;
+    }
+    
+//    self.imageView.transform = CGAffineTransformScale(self.imageView.transform, currentZoomScale, currentZoomScale);//不能使用这个函数
+    self.imageView.transform = CGAffineTransformMakeScale(currentZoomScale, currentZoomScale);
+    
+    if (pinchGestureRecognizer.state == UIGestureRecognizerStateEnded || pinchGestureRecognizer.state == UIGestureRecognizerStateCancelled) {
+        self.zoomScale = currentZoomScale;
+    }
 }
 
 
